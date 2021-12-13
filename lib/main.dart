@@ -1,67 +1,115 @@
 import 'package:flutter/material.dart';
-
+import './pages/add_todo.dart';
+import './pages/todo_list.dart';
+import 'package:splashscreen/splashscreen.dart';
+import './pages/help.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  // This widget is the root of your application.
+  bool _isInitialValue = true;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'To Do',
+        home: SplashScreen(
+          backgroundColor: Colors.indigo[400],
+          image: Image.network(
+            'https://media.istockphoto.com/photos/christmas-or-winter-composition-snowflakes-and-red-berries-on-gray-picture-id1285648942?b=1&k=20&m=1285648942&s=170667a&w=0&h=SWKc2PZ8byxHJsPDKb-A0gea2pG2fvH-GiJG6xjd9cw=',
+          fit: BoxFit.fill,
+          ),
+          seconds: 5,
+          title: const Text(
+            'Welcome..',
+            style: TextStyle(color: Colors.white, fontSize: 30),
+          ),
+          navigateAfterSeconds: Home(),
+        ));
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
-
+class Home extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _HomeState createState() => _HomeState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _HomeState extends State<Home> {
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
 
+  bool _isInitialValue = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
+    return SafeArea(
+        child: DefaultTabController(
+            length: 3,
+            child: Scaffold(
+              appBar: AppBar(
+                title: Text("2 Do"),
+                centerTitle: true,
+                bottom:const  TabBar(
+                  labelColor: Colors.white,
+                  tabs: [
+                    Tab(
+                        child: CircleAvatar(
+                      backgroundColor: Colors.yellow,
+                      child: Icon(
+                        Icons.add,
+                      ),
+                    )),
+                    Tab(
+                        child: CircleAvatar(
+                      backgroundColor: Colors.yellow,
+                      child: Icon(
+                        Icons.note,
+                      ),
+                    )),
+                    Tab(
+                        child: CircleAvatar(
+                      backgroundColor: Colors.yellow,
+                      child: Icon(
+                        Icons.camera,
+                      ),
+                    )),
+                  ],
+                ),
+              ),
+              body: TabBarView(
+                children: [
+                  AddTodo(),
+                  ListTodos(),
+                  Help(),
+                ],
+              ),
+              drawer: Drawer(
+                  child: Column(
+                children: [
+                  const UserAccountsDrawerHeader(
+                    currentAccountPicture: CircleAvatar(
+                      child: Icon(Icons.account_circle_outlined),
+                    ),
+                    accountEmail: Text('gson of mary'),
+                    accountName: Text('G@Nah'),
+                  ),
+                 const  ListTile(
+                    leading: Icon(Icons.account_circle_outlined),
+                    title: Text('Add studet..'),
+                  ),
+                  const Divider(),
+                  ListTile(
+                    leading: Icon(Icons.account_circle_outlined),
+                    title: const Text('List of Studetns'),
+                    trailing: const Icon(Icons.account_circle_outlined),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ListTodos()),
+                      );
+                    },
+                  ),
+                ],
+              )),
+            )));
   }
 }
